@@ -7,9 +7,11 @@ tbl = read.table('shrinked.dat')
 tbl = normalize_columns(tbl)
 tbl = pre_select_attrs(tbl)
 
-dissE = vegdist(tbl, method="raup")
+dissRaup = vegdist(tbl, method="raup")
+dissJaccard = vegdist(tbl, method="jaccard")
+
 km = kmeans(tbl, 7)
-s_km = silhouette(km$cl, dissE)
+s_km = silhouette(km$cl, dissRaup)
 
 #hk = cutree(hclust(dissE), 2)
 #s_hk = silhouette(hk, dissE)
