@@ -1,4 +1,8 @@
 #!/usr/bin/python
+'''
+Check maximum parameter number. It will be number of columns in tabelar data
+'''
+
 import sys, os, logging
 
 

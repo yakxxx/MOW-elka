@@ -3,6 +3,7 @@ require(vegan)
 
 TRESH = 0.01
 
+
 pre_select_attrs = function(data){
     rows_num = nrow(data)
     column_probability = colSums(data) / rows_num 
@@ -22,25 +23,36 @@ normalize_columns = function(data){
 }
 
 
-select_k = function(data){
-    x = data[sample(nrow(data), 3000),]
+get_sample = function(data, no){
+    x = data[sample(nrow(data), no),]
     diss = vegdist(x, method="raup")
-    
-    k=-1
-    max_s_km = -1
-    for(i in 2:20){
-        km = kmeans(x, i, iter.max = 20)
-        s_km = summary(silhouette(km$cl, diss))$avg.width
-        if(s_km > max_s_km){
-             max_s_km = s_km
-             k = i
-        }
+    ret = list(data=x, diss=diss)
+    return(ret)
+}
+
+
+select_features = function(data, k, sample_no){
+    sample = get_sample(data, sample_no)
+    x = sample$data
+    diss = sample$diss
+
+    eval_feature_set = function(f_set){
+        eval_diss = vegdist(x[f_set], method="raup")
+        km = kmeans(x[f_set], k, iter.max = 20)
+        sil = summary(silhouette(km$cl, eval_diss))$avg.width
+        print(sil)
+        return(sil)
     }
-    return(c(k, max_s_km))
-}
-
-
-select_features = function(data){
-
+    
+    feature_set = hill.climbing.search(names(data), eval_feature_set)
+    print(feature_set)
+    return(feature_set)
 
 }
+
+
+
+
+
+
+

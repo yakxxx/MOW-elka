@@ -1,4 +1,11 @@
 #!/usr/bin/python
+'''
+gets original data fielname and probability for each row to be present in 
+output.
+
+Used to shrink data to speed-up processing and cut down used memory.
+'''
+
 
 import random
 import sys
